@@ -18,15 +18,6 @@ class AccountPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(authStateProvider.notifier).getUserDetails();
     final userId = ref.watch(userIdProvider);
-    final numberOfPosts = FirebaseFirestore.instance
-        .collection('posts')
-        .where('uid', isEqualTo: userId)
-        .count()
-        .get()
-        .then((value) => ref
-            .read(postNumberProvider.notifier)
-            .update((state) => value.count));
-
     return Scaffold(
       body: Column(
         children: [
@@ -140,7 +131,7 @@ class AccountPage extends ConsumerWidget {
                                 style: TextStyle(fontSize: 12.0),
                               ),
                               Text(
-                                "259",
+                                "1",
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -155,7 +146,7 @@ class AccountPage extends ConsumerWidget {
                                 style: TextStyle(fontSize: 12.0),
                               ),
                               Text(
-                                "20",
+                                "2",
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -169,28 +160,27 @@ class AccountPage extends ConsumerWidget {
             ],
           ),
           Expanded(
-            child: Container(
-              child: StreamBuilder(
-                stream:
-                    FirebaseFirestore.instance.collection('posts').snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      return PostWidget(
-                        snap: snapshot.data!.docs[index].data(),
-                      );
-                    },
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .where('uid', isEqualTo: userId)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
+                }
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return PostWidget(
+                      snap: snapshot.data!.docs[index].data(),
+                    );
+                  },
+                );
+              },
             ),
           )
         ],
