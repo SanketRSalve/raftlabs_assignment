@@ -34,9 +34,20 @@ class AccountPage extends ConsumerWidget {
             alignment: Alignment.topCenter,
             children: [
               Container(
+                alignment: Alignment.topRight,
                 color: AppConst.kPrimaryColor,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.1,
+                child: IconButton(
+                  onPressed: () {
+                    ref.read(authStateProvider.notifier).logOut();
+                  },
+                  icon: const Icon(
+                    Icons.logout_sharp,
+                    color: Colors.white,
+                    size: 28.0,
+                  ),
+                ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 50),
