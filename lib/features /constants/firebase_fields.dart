@@ -8,6 +8,8 @@ class FirebaseFieldName {
   static const displayName = 'display_name';
   static const email = 'email';
   static const photoUrl = 'photo_url';
+  static const followers = 'followers';
+  static const followings = 'followings';
 
   const FirebaseFieldName._();
 }

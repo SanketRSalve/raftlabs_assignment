@@ -3,12 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:raftlabs_newsfeed/features%20/authentication/notifiers/authstate_notifier.dart';
 import 'package:raftlabs_newsfeed/features%20/discover/screens/discover_page.dart';
 import 'package:raftlabs_newsfeed/features%20/feeds/presentation/screens/feeds_page.dart';
-import 'package:raftlabs_newsfeed/features%20/imagepick/screens/post_select.dart';
-
 import 'features /account/presentation/screens/account_page.dart';
 import 'features /authentication/presentation/screens/onboarding_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'features /constants/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
               if (isLoggedIn) {
                 return IndexedStack(
                   index: ref.watch(indexProvider),
-                  children: [
+                  children: const [
                     FeedsPage(),
                     DiscoverPage(),
                     AccountPage(),
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         bottomNavigationBar: Consumer(
           builder: (context, ref, child) {
             return BottomNavigationBar(
-              selectedItemColor: Color(0xFFFC5101),
+              selectedItemColor: AppConst.kPrimaryColor,
               currentIndex: ref.watch(indexProvider),
               iconSize: 24.0,
               selectedLabelStyle: const TextStyle(

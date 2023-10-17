@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:raftlabs_newsfeed/features%20/authentication/notifiers/authstate_notifier.dart';
 import 'package:raftlabs_newsfeed/features%20/imagepick/screens/post_select.dart';
-import 'package:raftlabs_newsfeed/features%20/user/providers/user_info_provider.dart';
+
+import '../../../constants/constants.dart';
+import '../../../feeds/presentation/widgets/post_widget.dart';
+
+final postNumberProvider = StateProvider<int>((ref) {
+  return 0;
+});
 
 class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
@@ -10,6 +17,16 @@ class AccountPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userDetails = ref.watch(authStateProvider.notifier).getUserDetails();
+    final userId = ref.watch(userIdProvider);
+    final numberOfPosts = FirebaseFirestore.instance
+        .collection('posts')
+        .where('uid', isEqualTo: userId)
+        .count()
+        .get()
+        .then((value) => ref
+            .read(postNumberProvider.notifier)
+            .update((state) => value.count));
+
     return Scaffold(
       body: Column(
         children: [
@@ -17,7 +34,7 @@ class AccountPage extends ConsumerWidget {
             alignment: Alignment.topCenter,
             children: [
               Container(
-                color: Colors.amber,
+                color: AppConst.kPrimaryColor,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
@@ -70,14 +87,17 @@ class AccountPage extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CircleAvatar(
-                      foregroundImage: AssetImage('assets/images/avatar.jpg'),
-                      radius: 32.0,
+                    CircleAvatar(
+                      foregroundImage: NetworkImage(userDetails.photoUrl),
+                      radius: 36.0,
+                    ),
+                    SizedBox(
+                      height: 5.0,
                     ),
                     Text(
                       userDetails.displayName,
                       style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.normal),
+                          fontSize: 18.0, fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
                       height: 20.0,
@@ -94,7 +114,7 @@ class AccountPage extends ConsumerWidget {
                                 style: TextStyle(fontSize: 12.0),
                               ),
                               Text(
-                                "18",
+                                ref.watch(postNumberProvider).toString(),
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -137,11 +157,37 @@ class AccountPage extends ConsumerWidget {
               ),
             ],
           ),
+          Expanded(
+            child: Container(
+              child: StreamBuilder(
+                stream:
+                    FirebaseFirestore.instance.collection('posts').snapshots(),
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return PostWidget(
+                        snap: snapshot.data!.docs[index].data(),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          )
         ],
       ),
       floatingActionButton: Consumer(
         builder: (context, ref, child) {
           return FloatingActionButton(
+            backgroundColor: AppConst.kPrimaryColor,
             child: const Icon(Icons.add),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(

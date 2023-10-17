@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:raftlabs_newsfeed/features%20/authentication/repositories/authentication.dart';
 import 'package:raftlabs_newsfeed/features%20/authentication/models/auth_state.dart';
@@ -42,10 +42,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   UserInfoModel getUserDetails() {
     return UserInfoModel(
-        userId: _authenticator.userId!,
-        displayName: _authenticator.displayName,
-        photoUrl: _authenticator.photoUrl!,
-        email: _authenticator.email);
+      userId: _authenticator.userId!,
+      displayName: _authenticator.displayName,
+      photoUrl: _authenticator.photoUrl!,
+      email: _authenticator.email,
+      followers: [],
+      followings: [],
+    );
   }
 
   Future<void> logOut() async {
@@ -73,4 +76,34 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         email: _authenticator.email,
         photoUrl: _authenticator.photoUrl,
       );
+
+  // Future<void> followUser(
+  //   String uid,
+  //   String followId,
+  // ) async {
+  //   try {
+  //     DocumentSnapshot snap =
+  //         await _firestore.collection('users').doc(uid).get();
+  //     List followings = (snap.data()! as dynamic)['followings'];
+
+  //     if (followings.contains(followId)) {
+  //       await _firestore.collection('users').doc(followId).update({
+  //         'followers': FieldValue.arrayRemove([uid])
+  //       });
+
+  //       await _firestore.collection('users').doc(uid).update({
+  //         'followings': FieldValue.arrayRemove([uid])
+  //       });
+  //     } else {
+  //       await _firestore.collection('users').doc(followId).update({
+  //         'followers': FieldValue.arrayUnion([uid])
+  //       });
+
+  //       await _firestore.collection('users').doc(uid).update({
+  //         "followings": FieldValue.arrayUnion([uid])
+  //       });
+  //     }
+  //     ;
+  //   } catch (e) {}
+  // }
 }

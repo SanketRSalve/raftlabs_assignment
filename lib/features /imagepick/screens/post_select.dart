@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:raftlabs_newsfeed/features%20/authentication/notifiers/authstate_notifier.dart';
 import 'package:raftlabs_newsfeed/features%20/imagepick/widgets/utils/image_pick.dart';
 import 'package:raftlabs_newsfeed/features%20/posts/repositories/firestore_methods.dart';
-import 'package:raftlabs_newsfeed/features%20/user/providers/user_info_provider.dart';
 
 class AddPostScreen extends ConsumerStatefulWidget {
   const AddPostScreen({super.key});
@@ -35,6 +34,7 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                   Uint8List file = await pickImage(ImageSource.gallery);
                   ref.read(imageFileProvider.notifier).update((state) => file);
                 },
+                child: const Text("Choose From Gallery"),
               )
             ],
           );
@@ -44,12 +44,8 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
 //Post to firebase storage
   void postImage(String uid, String username, String userImg) async {
     try {
-      String res = await FirestoreMethods().uploadPost(
-          ref.watch(imageFileProvider),
-          textEditingController.text,
-          uid,
-          username,
-          userImg);
+      await FirestoreMethods().uploadPost(ref.watch(imageFileProvider),
+          textEditingController.text, uid, username, userImg);
     } catch (e) {
       throw e;
     }
@@ -82,13 +78,15 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
               controller: textEditingController,
             ),
             ElevatedButton(
-                onPressed: () {
-                  final userDetails =
-                      ref.watch(authStateProvider.notifier).getUserDetails();
-                  postImage(userDetails.userId, userDetails.displayName,
-                      userDetails.photoUrl);
-                },
-                child: const Text("Post"))
+              onPressed: () {
+                final userDetails =
+                    ref.watch(authStateProvider.notifier).getUserDetails();
+                postImage(userDetails.userId, userDetails.displayName,
+                    userDetails.photoUrl);
+                Navigator.pop(context);
+              },
+              child: const Text("Post"),
+            ),
           ],
         ),
       ),

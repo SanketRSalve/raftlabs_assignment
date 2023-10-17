@@ -5,23 +5,29 @@ import 'package:raftlabs_newsfeed/features%20/constants/firebase_fields.dart';
 import 'package:raftlabs_newsfeed/features%20/constants/user_id.dart';
 
 @immutable
-class UserInfoModel extends MapView<String, String?> {
+class UserInfoModel extends MapView<String, dynamic> {
   final UserId userId;
   final String displayName;
   final String? email;
   final String photoUrl;
+  final List followers;
+  final List followings;
 
   UserInfoModel({
     required this.userId,
     required this.displayName,
     required this.email,
     required this.photoUrl,
+    required this.followers,
+    required this.followings,
   }) : super(
           {
             FirebaseFieldName.userId: userId,
             FirebaseFieldName.displayName: displayName,
             FirebaseFieldName.email: email,
             FirebaseFieldName.photoUrl: photoUrl,
+            FirebaseFieldName.followers: followers,
+            FirebaseFieldName.followings: followings,
           },
         );
 
@@ -33,6 +39,8 @@ class UserInfoModel extends MapView<String, String?> {
           displayName: json[FirebaseFieldName.displayName] ?? '',
           email: json[FirebaseFieldName.email],
           photoUrl: json[FirebaseFieldName.photoUrl],
+          followers: json[FirebaseFieldName.followers],
+          followings: json[FirebaseFieldName.followings],
         );
 
   @override
@@ -43,7 +51,9 @@ class UserInfoModel extends MapView<String, String?> {
           userId == other.userId &&
           displayName == other.displayName &&
           email == other.email &&
-          photoUrl == other.photoUrl;
+          photoUrl == other.photoUrl &&
+          followers == other.followers &&
+          followings == other.followings;
 
   @override
   int get hashCode => Object.hashAll(
@@ -52,6 +62,8 @@ class UserInfoModel extends MapView<String, String?> {
           displayName,
           email,
           photoUrl,
+          followers,
+          followings,
         ],
       );
 }
