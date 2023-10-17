@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "306507475087",
+    "project_id": "raftlabs-newsfeed",
+    "storage_bucket": "raftlabs-newsfeed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306507475087:android:8c8056eb2f6451e80128fa",
+        "android_client_info": {
+          "package_name": "com.example.raftlabs_newsfeed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306507475087-pi5kksq4qlsov8r786vvtf4ah851o7vu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrpgVXVtJqSKN6g-4IDy82HcqgxEm3LbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306507475087-pi5kksq4qlsov8r786vvtf4ah851o7vu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
