@@ -1,16 +1,24 @@
 # raftlabs_newsfeed
 
-A new Flutter project.
+A Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This app uses Firebase for authentication and for database.
 
-A few resources to get you started if this is your first Flutter project:
+### Table of Content
+1. Introduction
+2. Prerequisites
+3. Flutter Project Setup
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Introduction
+This app authenticates users using Firebase Authentication with Google Sign-In, allowing them to create posts and follow other users.
+
+### Prerequisites
+- Flutter SDK installed on your machine
+- Firebase project set up on the Firebase Console
+
+### Flutter Project Setup
+- clone the repo ```https://github.com/SanketRSalve/raftlabs_assignment.git```
+- run ```flutter pub get```
